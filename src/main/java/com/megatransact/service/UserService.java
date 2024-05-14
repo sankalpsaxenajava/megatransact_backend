@@ -16,9 +16,18 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * Register a new user and validate if user already exists.
+     * @param @UserDto userDto
+     * @return String
+     */
     public String registerUser(UserDto userDto) {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
             return "user already exists";
+        }
+
+        if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match");
         }
 
         User user = new User();
@@ -26,6 +35,7 @@ public class UserService {
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setConfirmPassword(passwordEncoder.encode(userDto.getConfirmPassword()));
         user.setPhoneNumber(userDto.getPhoneNumber());
         
         userRepository.save(user);
