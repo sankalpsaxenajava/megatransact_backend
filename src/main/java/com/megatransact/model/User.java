@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -46,6 +47,11 @@ public class User {
 
     @Column
     private String phoneNumber; // Optional
+
+    private String token;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime tokenCreationDate;
 
     @Override
     public final boolean equals(Object o) {

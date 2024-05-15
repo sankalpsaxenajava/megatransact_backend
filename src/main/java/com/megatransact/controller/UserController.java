@@ -23,5 +23,20 @@ public class UserController {
         String result = userService.registerUser(userDto);
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/forget-password")
+    public String forgetPassword(@RequestParam String email){
+        String response = userService.forgetPassword(email);
+
+        if(!response.startsWith("User does not")){
+            response= "http://localhost:8080/api/users/reset-password?token=" + response;
+        }
+        return response;
+    }
+
+    @PutMapping("/reset-password")
+    public String resetPassword(@RequestParam String token, @RequestParam String password){
+        return userService.resetPassword(token,password);
+    }
 }
 

@@ -18,6 +18,8 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/users/register").permitAll() // Allow access to register endpoint
+                        .requestMatchers("/api/users/forget-password").permitAll()
+                        .requestMatchers("/api/users/reset-password").permitAll()
                         .anyRequest().authenticated() // All other endpoints require authentication
                 );
         return http.build();
