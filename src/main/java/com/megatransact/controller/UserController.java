@@ -3,6 +3,7 @@ package com.megatransact.controller;
 import com.megatransact.dto.UserDto;
 import com.megatransact.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+
+    @Autowired
+    private Environment environment;
 
     @Autowired
     public UserController(UserService userService) {
@@ -29,7 +33,7 @@ public class UserController {
         String response = userService.forgetPassword(email);
 
         if(!response.startsWith("User does not")){
-            response= "http://localhost:8080/api/users/reset-password?token=" + response;
+            response= environment.getProperty("env.server_url")+"/api/users/reset-password?token=" + response;
         }
         return response;
     }
