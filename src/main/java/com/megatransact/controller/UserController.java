@@ -42,5 +42,10 @@ public class UserController {
     public String resetPassword(@RequestParam String token, @RequestParam String password){
         return userService.resetPassword(token,password);
     }
+
+    @PostMapping("/set-pin")
+    public String setPin(@RequestParam String email, @RequestParam String pin){
+        return userService.setPin(email, pin);
+    }
 }
 

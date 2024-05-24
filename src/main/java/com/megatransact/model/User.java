@@ -53,6 +53,8 @@ public class User {
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime tokenCreationDate;
 
+    private String pin;
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
