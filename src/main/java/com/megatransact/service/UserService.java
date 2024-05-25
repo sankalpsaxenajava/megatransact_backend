@@ -1,6 +1,7 @@
 package com.megatransact.service;
 
 import com.megatransact.dto.UserDto;
+import com.megatransact.dto.UserUpdateDTO;
 import com.megatransact.model.User;
 import com.megatransact.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,10 +67,9 @@ public class UserService {
     }
 
     private String generateToken() {
-        StringBuilder token = new StringBuilder();
 
-        return token.append(UUID.randomUUID().toString())
-                .append(UUID.randomUUID().toString()).toString();
+        return String.valueOf(UUID.randomUUID()) +
+                UUID.randomUUID();
     }
 
     private boolean isTokenExpired(final LocalDateTime tokenCreationDate) {
@@ -84,7 +84,7 @@ public class UserService {
     public String resetPassword(String token, String password){
         Optional<User> userOptional= Optional.ofNullable(userRepository.findByToken(token));
 
-        if(!userOptional.isPresent()){
+        if(userOptional.isEmpty()){
             return "Invalid token";
         }
         LocalDateTime tokenCreationDate = userOptional.get().getTokenCreationDate();
@@ -102,5 +102,19 @@ public class UserService {
         userRepository.save(user);
 
         return "Your password successfully updated.";
+    }
+
+    public String updateUser(UserUpdateDTO userUpdateDTO) {
+        Optional<User> userOptional = userRepository.findByEmail(userUpdateDTO.getEmail());
+
+        if (userOptional.isEmpty()) {
+            return "User does not exist";
+        }
+
+        User user = userOptional.get();
+        user.setPhoneNumber(userUpdateDTO.getPhoneNumber());
+
+        userRepository.save(user);
+        return "User info updated successfully";
     }
 }

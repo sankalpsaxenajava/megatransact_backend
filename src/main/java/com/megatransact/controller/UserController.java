@@ -1,6 +1,7 @@
 package com.megatransact.controller;
 
 import com.megatransact.dto.UserDto;
+import com.megatransact.dto.UserUpdateDTO;
 import com.megatransact.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -29,18 +30,29 @@ public class UserController {
     }
 
     @PostMapping("/forget-password")
-    public String forgetPassword(@RequestParam String email){
+    public String forgetPassword(@RequestParam String email) {
         String response = userService.forgetPassword(email);
 
-        if(!response.startsWith("User does not")){
-            response= environment.getProperty("env.server_url")+"/api/users/reset-password?token=" + response;
+        if (!response.startsWith("User does not")) {
+            response = environment.getProperty("env.server_url") + "/api/users/reset-password?token=" + response;
         }
         return response;
     }
 
     @PutMapping("/reset-password")
-    public String resetPassword(@RequestParam String token, @RequestParam String password){
-        return userService.resetPassword(token,password);
+    public String resetPassword(@RequestParam String token, @RequestParam String password) {
+        return userService.resetPassword(token, password);
+    }
+
+    //Update user info
+    @PutMapping("/update")
+    public ResponseEntity<String> updateUser(@RequestBody UserUpdateDTO userUpdateDTO) {
+        String result = userService.updateUser(userUpdateDTO);
+        if (result.equals("User info updated successfully")) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.status(404).body(result);
+        }
     }
 }
 
