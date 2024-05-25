@@ -20,6 +20,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/register").permitAll() // Allow access to register endpoint
                         .requestMatchers("/api/users/forget-password").permitAll()
                         .requestMatchers("/api/users/reset-password").permitAll()
+                        .requestMatchers("/api/users/set-pin").permitAll()
                         .requestMatchers("/api/users/update").permitAll()
                         .anyRequest().authenticated() // All other endpoints require authentication
                 );

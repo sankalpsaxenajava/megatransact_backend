@@ -54,5 +54,10 @@ public class UserController {
             return ResponseEntity.status(404).body(result);
         }
     }
+
+    @PostMapping("/set-pin")
+    public String setPin(@RequestParam String email, @RequestParam String pin){
+        return userService.setPin(email, pin);
+    }
 }
 

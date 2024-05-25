@@ -45,7 +45,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setConfirmPassword(passwordEncoder.encode(userDto.getConfirmPassword()));
         user.setPhoneNumber(userDto.getPhoneNumber());
-        
+
         userRepository.save(user);
         return "user created successfully";
     }
@@ -102,6 +102,25 @@ public class UserService {
         userRepository.save(user);
 
         return "Your password successfully updated.";
+    }
+
+    public String setPin(String email, String pin){
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if(!userOptional.isPresent()){
+            return "User does not exist";
+        }
+
+        //pin should consist 0-9 only and it should be 5 digits
+        if (!(pin.matches("[0-9]+") && (pin.length() ==5))) { //matches("[0-9]+]"
+            throw new IllegalArgumentException("Please enter a valid pin number");
+        }else{
+            User user = userOptional.get();
+
+            user.setPin(passwordEncoder.encode(pin));
+            userRepository.save(user);
+            return "Your pin set succesfully";
+        }
     }
 
     public String updateUser(UserUpdateDTO userUpdateDTO) {
