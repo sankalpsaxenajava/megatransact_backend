@@ -30,18 +30,15 @@ public class UserController {
     }
 
     @PostMapping("/forget-password")
-    public String forgetPassword(@RequestParam String email) {
-        String response = userService.forgetPassword(email);
-
-        if (!response.startsWith("User does not")) {
-            response = environment.getProperty("env.server_url") + "/api/users/reset-password?token=" + response;
-        }
-        return response;
+    public ResponseEntity<String> forgetPassword(@RequestParam String email) {
+        String token = userService.forgetPassword(email);
+        return ResponseEntity.ok(environment.getProperty("env.server_url")+"/api/users/reset-password?token=" + token);
     }
 
     @PutMapping("/reset-password")
-    public String resetPassword(@RequestParam String token, @RequestParam String password) {
-        return userService.resetPassword(token, password);
+    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String password) {
+        userService.resetPassword(token,password);
+        return ResponseEntity.ok("Your password reset successfully");
     }
 
     //Update user info
@@ -56,8 +53,9 @@ public class UserController {
     }
 
     @PostMapping("/set-pin")
-    public String setPin(@RequestParam String email, @RequestParam String pin){
-        return userService.setPin(email, pin);
+    public ResponseEntity<String> setPin(@RequestParam String email, @RequestParam String pin){
+        userService.setPin(email, pin);
+        return ResponseEntity.ok("Your pin set successfully");
     }
 }
 

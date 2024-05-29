@@ -2,6 +2,7 @@ package com.megatransact.service;
 
 import com.megatransact.dto.UserDto;
 import com.megatransact.dto.UserUpdateDTO;
+import com.megatransact.exception.CustomExceptions;
 import com.megatransact.model.User;
 import com.megatransact.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,11 +52,11 @@ public class UserService {
     }
 
     //generate a forget password link
-    public String forgetPassword(String email){
+    public String forgetPassword(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if(!userOptional.isPresent()){
-            return "User does not exist";
+            throw new CustomExceptions.UserNotFound(email);
         }
 
         User user=userOptional.get();
@@ -81,16 +82,16 @@ public class UserService {
     }
 
     //reset password by forget password link
-    public String resetPassword(String token, String password){
+    public String resetPassword(String token, String password) {
         Optional<User> userOptional= Optional.ofNullable(userRepository.findByToken(token));
 
-        if(userOptional.isEmpty()){
-            return "Invalid token";
+        if(!userOptional.isPresent()){
+            throw new CustomExceptions.UnAuthorized(token);
         }
         LocalDateTime tokenCreationDate = userOptional.get().getTokenCreationDate();
 
         if (isTokenExpired(tokenCreationDate)) {
-            return "Token expired.";
+            throw new CustomExceptions.UnAuthorized(token);
         }
 
         User user = userOptional.get();
@@ -101,25 +102,25 @@ public class UserService {
 
         userRepository.save(user);
 
-        return "Your password successfully updated.";
+        return "success";
     }
 
     public String setPin(String email, String pin){
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if(!userOptional.isPresent()){
-            return "User does not exist";
+            throw new CustomExceptions.UserNotFound(email);
         }
 
         //pin should consist 0-9 only and it should be 5 digits
         if (!(pin.matches("[0-9]+") && (pin.length() ==5))) { //matches("[0-9]+]"
-            throw new IllegalArgumentException("Please enter a valid pin number");
+            throw new CustomExceptions.InvalidArgument(pin);
         }else{
             User user = userOptional.get();
 
             user.setPin(passwordEncoder.encode(pin));
             userRepository.save(user);
-            return "Your pin set succesfully";
+            return "Your pin set successfully";
         }
     }
 
