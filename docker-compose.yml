@@ -1,0 +1,35 @@
+version: "2"
+services:
+  server:
+    container_name: megatransact-app
+    image: megatransact-backend
+    build: .
+    ports:
+      - "9090:8080"
+    environment:
+      - MYSQL_HOST:mysqldb
+      - MYSQL_USER:root
+      #- MYSQL_PASSWORD:root
+      #- MYSQL_ROOT_PASSWORD:root
+      - MYSQL_ALLOW_EMPTY_PASSWORD:1
+      - MYSQL_PORT:3306
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/megatransactdb?useSSL=false
+    networks:
+      - spring-net
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:8
+    ports:
+      - 3307:3306
+    networks:
+      - spring-net
+    environment:
+      #- MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD:1
+      - MYSQL_DATABASE=megatransactdb
+
+networks:
+  spring-net:
