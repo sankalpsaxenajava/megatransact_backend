@@ -5,7 +5,6 @@ COPY pom.xml /opt/app/
 RUN mvn clean install -DskipTests > /dev/null 2>&1 || true
 COPY . .
 RUN mvn clean install -DskipTests
-RUN ls -al /opt/app/target
 
 # ################################################################################
 # STAGE: SERVE
