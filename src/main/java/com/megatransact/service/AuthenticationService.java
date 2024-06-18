@@ -60,7 +60,7 @@ public class AuthenticationService implements UserDetailsService {
     public String setPin(String email, String pin){
         Optional<User> userOptional = userRepository.findByEmail(email);
 
-        if(!userOptional.isPresent()){
+        if(userOptional.isEmpty()){
             return "User does not exist";
         }
 
@@ -80,7 +80,7 @@ public class AuthenticationService implements UserDetailsService {
     public String forgetPassword(String email){
         Optional<User> userOptional = userRepository.findByEmail(email);
 
-        if(!userOptional.isPresent()){
+        if(userOptional.isEmpty()){
             return "User does not exist";
         }
 
