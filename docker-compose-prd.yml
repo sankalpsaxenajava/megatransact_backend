@@ -17,9 +17,9 @@ services:
       timeout: 20s
     environment:
       - "TZ=UTC"
-      - "MYSQL_ROOT_PASSWORD=megatransactdbrootuser"
-      - "MYSQL_USER=megatransactdev"
-      - "MYSQL_PASSWORD=megatransactapp"
+      - "MYSQL_ROOT_PASSWORD=fJ3jvK=U3CD-Og7-"
+      - "MYSQL_USER=megatransactprd"
+      - "MYSQL_PASSWORD=5qsc_d87ccD3RKQ4"
       - "MYSQL_DATABASE=megatransactdb"
     ports:
       - 60345:3306
@@ -43,8 +43,8 @@ services:
       - "DB_HOST=mysqldb"
       - "DB_PORT=3306"
       - "DB_NAME=megatransactdb"
-      - "DB_USER=megatransactdev"
-      - "DB_PASS=megatransactapp"
+      - "DB_USER=megatransactprd"
+      - "DB_PASS=5qsc_d87ccD3RKQ4"
       - "APP_ENV_SERVER_URL=http://localhost:8080"
     ports:
       - 61789:8080
