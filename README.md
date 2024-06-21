@@ -33,6 +33,11 @@
 - Open terminal
 - Run command: `docker compose up mysqldb -d`
 
+### Starting production docker compose:
+
+- Open terminal
+- Run command: `docker compose -f docker-compose-prd.yml up -d`
+
 ### Creating migration template file
 
 - Open terminal

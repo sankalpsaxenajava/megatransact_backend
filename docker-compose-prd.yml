@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:8
+    restart: unless-stopped
+    logging:
+      options:
+        max-file: "5"
+        max-size: "20m"
+    healthcheck:
+      test: mysql --user=root --password=$$MYSQL_ROOT_PASSWORD --execute="SELECT VERSION();"
+      interval: 10s
+      retries: 15
+      start_period: 5s
+      timeout: 20s
+    environment:
+      - "TZ=UTC"
+      - "MYSQL_ROOT_PASSWORD=megatransactdbrootuser"
+      - "MYSQL_USER=megatransactdev"
+      - "MYSQL_PASSWORD=megatransactapp"
+      - "MYSQL_DATABASE=megatransactdb"
+    ports:
+      - 60345:3306
+    volumes:
+      - /opt/megatransact/data:/var/lib/mysql
+
+  megatransact-backend:
+    container_name: megatransact-backend
+    image: megatransact-backend
+    restart: unless-stopped
+    logging:
+      options:
+        max-file: "5"
+        max-size: "20m"
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prd"
+      - "SERVER_PORT=8080"
+      - "DB_HOST=mysqldb"
+      - "DB_PORT=3306"
+      - "DB_NAME=megatransactdb"
+      - "DB_USER=megatransactdev"
+      - "DB_PASS=megatransactapp"
+      - "APP_ENV_SERVER_URL=http://localhost:8080"
+    ports:
+      - 61789:8080
