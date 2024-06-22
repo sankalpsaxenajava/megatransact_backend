@@ -29,8 +29,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/set-pin")
-    public String setPin(@RequestParam String email, @RequestParam String pin){
-        return authenticationService.setPin(email, pin);
+    public ResponseEntity<String> setPin(@RequestParam String email, @RequestParam String pin){
+        authenticationService.setPin(email, pin);
+        return ResponseEntity.ok("Your pin set successfully");
     }
 
     @PostMapping("/forget-password")
@@ -44,7 +45,8 @@ public class AuthenticationController {
     }
 
     @PutMapping("/reset-password")
-    public String resetPassword(@RequestParam String token, @RequestParam String password) {
-        return authenticationService.resetPassword(token, password);
+    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String password) {
+        authenticationService.resetPassword(token,password);
+        return ResponseEntity.ok("Your password reset successfully");
     }
 }

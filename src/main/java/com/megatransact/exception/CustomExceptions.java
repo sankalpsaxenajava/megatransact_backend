@@ -7,15 +7,15 @@ public class CustomExceptions {
         }
     }
 
-    public static class UnAuthorized extends RuntimeException {
-        public UnAuthorized(String message) {
-            super("Un authorized " + message);
+    public static class Unauthorized extends RuntimeException {
+        public Unauthorized(String message) {
+            super("Unauthorized " + message);
         }
     }
 
     public static class InvalidArgument extends RuntimeException {
         public InvalidArgument(String message) {
-            super("In valid argument "+ message);
+            super("Invalid argument "+ message);
         }
     }
 }

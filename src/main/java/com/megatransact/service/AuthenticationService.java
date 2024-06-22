@@ -1,5 +1,6 @@
 package com.megatransact.service;
 
+import com.megatransact.exception.CustomExceptions;
 import com.megatransact.model.User;
 import com.megatransact.repository.UserRepository;
 import com.megatransact.security.JwtUtil;
@@ -17,6 +18,14 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
+/**
+ * This class is responsible for authenticating users and generating tokens for them.
+ * It also provides methods for setting a pin, generating a forget password link, and resetting the password.
+ * @author romulo.domingos
+ * @since 1.0
+ * @version 1.0
+ */
+
 
 @Service
 public class AuthenticationService implements UserDetailsService {
@@ -57,31 +66,30 @@ public class AuthenticationService implements UserDetailsService {
                 .build();
     }
 
-    public String setPin(String email, String pin){
+    public void setPin(String email, String pin){
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if(userOptional.isEmpty()){
-            return "User does not exist";
+            throw new CustomExceptions.UserNotFound(email);
         }
 
         //pin should consist 0-9 only and it should be 5 digits
         if (!(pin.matches("[0-9]+") && (pin.length() ==5))) { //matches("[0-9]+]"
-            throw new IllegalArgumentException("Please enter a valid pin number");
+            throw new CustomExceptions.InvalidArgument(pin);
         }else{
             User user = userOptional.get();
 
             user.setPin(passwordEncoder.encode(pin));
             userRepository.save(user);
-            return "Your pin set succesfully";
         }
     }
 
     //generate a forget password link
-    public String forgetPassword(String email){
+    public String forgetPassword(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if(userOptional.isEmpty()){
-            return "User does not exist";
+            throw new CustomExceptions.UserNotFound(email);
         }
 
         User user=userOptional.get();
@@ -107,16 +115,16 @@ public class AuthenticationService implements UserDetailsService {
     }
 
     //reset password by forget password link
-    public String resetPassword(String token, String password){
+    public void resetPassword(String token, String password) {
         Optional<User> userOptional= Optional.ofNullable(userRepository.findByToken(token));
 
         if(userOptional.isEmpty()){
-            return "Invalid token";
+            throw new CustomExceptions.Unauthorized(token);
         }
         LocalDateTime tokenCreationDate = userOptional.get().getTokenCreationDate();
 
         if (isTokenExpired(tokenCreationDate)) {
-            return "Token expired.";
+            throw new CustomExceptions.Unauthorized(token);
         }
 
         User user = userOptional.get();
@@ -127,7 +135,6 @@ public class AuthenticationService implements UserDetailsService {
 
         userRepository.save(user);
 
-        return "Your password successfully updated.";
     }
 
 }

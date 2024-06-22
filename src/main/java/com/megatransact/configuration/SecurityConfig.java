@@ -16,6 +16,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * This class is responsible for configuring the security of the application.
+ * It defines the security filter chain and the authentication manager.
+ * @author romulo.domingos
+ * @version 1.0
+ * @since 1.0
+ */
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
