@@ -12,6 +12,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * This class is responsible for generating and validating JWT tokens.
+ * It also provides methods for extracting the username and expiration date from the token.
+ * @author romulo.domingos
+ * @since 1.0
+ * @version 1.0
+ */
+
 @Component
 public class JwtUtil {
 
