@@ -3,7 +3,7 @@ package com.megatransact.dto;
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class UserDTO {
     private String firstName;
     private String lastName;
     private String email;
