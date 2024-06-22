@@ -98,6 +98,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>megatransact-backend</finalName>
     </build>
 
 </project>
