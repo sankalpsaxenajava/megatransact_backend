@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * This class is responsible for configuring the security of the application.
  * It defines the security filter chain and the authentication manager.
+ *
  * @author romulo.domingos
  * @version 1.0
  * @since 1.0
@@ -41,18 +42,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize -> authorize
-                        // Publicly accessible endpoints
-                        .requestMatchers("/api/users/register",
-                                "/api/auth/login",
-                                "/api/users/forget-password",
-                                "/api/users/reset-password").permitAll()
-                        // Protect the rest of the endpoints
-                        .requestMatchers("/api/auth/set-pin",
-                                "/api/users/update").authenticated()
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+            .authorizeHttpRequests(authorize -> authorize
+                // Publicly accessible endpoints
+                .requestMatchers(
+                    "/api/users/register",
+                    "/api/auth/login",
+                    "/api/users/forget-password",
+                    "/api/users/reset-password",
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**"
+                ).permitAll()
+                // Protect the rest of the endpoints
+                .requestMatchers("/api/auth/set-pin",
+                    "/api/users/update").authenticated()
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         // Configure AuthenticationManager directly within HttpSecurity
         http.authenticationManager(authenticationManager(http));
@@ -60,19 +65,18 @@ public class SecurityConfig {
         return http.build();
     }
 
-
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    return new BCryptPasswordEncoder();
+  }
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder =
-                http.getSharedObject(AuthenticationManagerBuilder.class);
+            http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder());
         return authenticationManagerBuilder.build();
     }
 }
