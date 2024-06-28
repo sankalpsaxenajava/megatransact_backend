@@ -12,11 +12,6 @@
 - Profile: dev
 - Server port: 8080
 
-## Production settings (via docker compose)
-
-- Profile: prd
-- Server port: 9090
-
 ## Building docker image
 
 - Linux and MacOS (need administrator privileges)
@@ -28,20 +23,23 @@
 
 ## Other instructions
 
-### Starting development database only:
+### Starting development database:
 
 - Open terminal
-- Run command: `docker compose up mysqldb -d`
+- Navigate to `./src/docker/dev` folder
+- Run command: `docker compose up -d`
+- Database credentials
+  - Host: localhost:3306
+  - User: megatransactdev
+  - Pass: megatransactapp
+  - Database: megatransactdb
 
-### Starting production docker compose:
-
-- Open terminal
-- Run command: `docker compose -f docker-compose-prd.yml up -d`
+> The database will be persisted locally, in the same docker-compose.yml folder, but it should not be committed, hence why it is ignored in .gitignore
 
 ### Creating migration template file
 
 - Open terminal
-- Navigate to `src/main/resources/db` folder
+- Navigate to `./src/main/resources/db` folder
   - In Windows: run command `create_migration.bat`
   - In Linux, MacOS or Windows with Git Bash: run command `create_migration.sh`
 - Follow the instructions
@@ -50,7 +48,7 @@
 ### Creating migration and rollback template file
 
 - Open terminal
-- Navigate to `src/main/resources/db` folder
+- Navigate to `./src/main/resources/db` folder
   - In Windows: run command `create_migration_and_rollback.bat`
   - In Linux, MacOS or Windows with Git Bash: run command `create_migration_and_rollback.sh`
 - Follow the instructions

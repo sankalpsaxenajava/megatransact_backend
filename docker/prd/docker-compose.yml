@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   mysqldb:
     container_name: mysqldb
@@ -46,5 +44,7 @@ services:
       - "DB_USER=megatransactprd"
       - "DB_PASS=5qsc_d87ccD3RKQ4"
       - "APP_ENV_SERVER_URL=http://localhost:8080"
+      - "APP_JWT_SECRET=NGUyODAxNmFjY2IyZDkzNzQ2NjAzOWFkNDZiMzI1YzZkMmRlNzJlMTBjYzRmMmU2OGQzMWM5NTU4YmUxNWVmYg=="
+      - "APP_SWAGGER_SERVER_URL=http://52.63.234.170:61789"
     ports:
       - 61789:8080
